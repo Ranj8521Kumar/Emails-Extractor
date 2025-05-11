@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
+# Import utils directly when running from the server directory
 from utils import extract_emails_from_url
 import os
 
@@ -53,12 +54,16 @@ def extract_emails():
 # Serve frontend files
 @app.route('/client/<path:path>')
 def serve_client(path):
-    client_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'client')
+    # Get the absolute path to the client directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    client_dir = os.path.join(os.path.dirname(current_dir), 'client')
     return send_from_directory(client_dir, path)
 
 @app.route('/client/')
 def serve_client_index():
-    client_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'client')
+    # Get the absolute path to the client directory
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    client_dir = os.path.join(os.path.dirname(current_dir), 'client')
     return send_from_directory(client_dir, 'index.html')
 
 if __name__ == '__main__':
