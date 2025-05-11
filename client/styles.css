@@ -1,33 +1,66 @@
-/* Global Styles */
+/**
+ * Email Extractor - Frontend Styles
+ *
+ * This stylesheet defines the visual appearance of the Email Extractor application.
+ * It uses CSS variables for consistent theming and responsive design for various screen sizes.
+ *
+ * Author: Your Name
+ * Date: May 2025
+ */
+
+/*
+ * Global CSS Variables
+ *
+ * These variables define the color scheme and can be easily modified
+ * to change the entire theme of the application.
+ */
 :root {
-    --primary-color: #4a6fa5;
-    --secondary-color: #166088;
-    --accent-color: #4fc3f7;
-    --background-color: #f5f7fa;
-    --card-color: #ffffff;
-    --text-color: #333333;
-    --border-color: #e0e0e0;
-    --success-color: #4caf50;
-    --error-color: #f44336;
+    --primary-color: #4a6fa5;    /* Main brand color */
+    --secondary-color: #166088;  /* Secondary brand color for hover states */
+    --accent-color: #4fc3f7;     /* Accent color for highlights */
+    --background-color: #f5f7fa; /* Page background */
+    --card-color: #ffffff;       /* Card/container background */
+    --text-color: #333333;       /* Main text color */
+    --border-color: #e0e0e0;     /* Border color for separators */
+    --success-color: #4caf50;    /* Success messages and indicators */
+    --error-color: #f44336;      /* Error messages and indicators */
 }
 
+/*
+ * Base Element Styles
+ *
+ * Reset and base styles for all elements to ensure consistent rendering
+ * across different browsers.
+ */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    box-sizing: border-box; /* Include padding and border in element's width and height */
 }
 
+/*
+ * Body Styles
+ *
+ * Main styling for the document body, setting the font family,
+ * background color, and text color.
+ */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: var(--background-color);
     color: var(--text-color);
-    line-height: 1.6;
+    line-height: 1.6; /* Improved readability with increased line height */
 }
 
+/*
+ * Container
+ *
+ * Main container that centers the content and sets a maximum width
+ * for better readability on larger screens.
+ */
 .container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem;
+    max-width: 900px; /* Limit width for better readability on large screens */
+    margin: 0 auto;   /* Center the container horizontally */
+    padding: 2rem;    /* Add space around the content */
 }
 
 /* Header Styles */

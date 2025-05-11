@@ -1,29 +1,47 @@
 <!DOCTYPE html>
+<!--
+    Email Extractor - Frontend HTML
+
+    This is the main HTML file for the Email Extractor application.
+    It provides the user interface for extracting emails from websites.
+
+    Author: Your Name
+    Date: May 2025
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Website Email Extractor</title>
+    <!-- Application styles -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+    <!-- Main container for the application -->
     <div class="container">
+        <!-- Header section with title and description -->
         <header>
             <h1><i class="fas fa-envelope"></i> Website Email Extractor</h1>
             <p>Extract all email addresses from an entire website</p>
         </header>
 
+        <!-- Main content area -->
         <main>
+            <!-- Search form section -->
             <div class="search-container">
                 <form id="extractForm">
+                    <!-- URL input with settings toggle -->
                     <div class="input-group">
                         <input type="url" id="websiteUrl" placeholder="Enter website URL (e.g., https://example.com)" required>
+                        <!-- Settings gear icon -->
                         <div class="settings-toggle" id="settingsToggle">
                             <i class="fas fa-cog"></i>
                         </div>
                     </div>
 
+                    <!-- Advanced settings panel (hidden by default) -->
                     <div class="advanced-settings" id="advancedSettings">
                         <div class="setting">
                             <label for="maxPages">Maximum pages to crawl:</label>
@@ -32,6 +50,7 @@
                         </div>
                     </div>
 
+                    <!-- Submit button with loading spinner -->
                     <button type="submit" id="extractButton">
                         <span class="button-text">Extract Emails</span>
                         <span class="spinner hidden"></span>
@@ -39,7 +58,9 @@
                 </form>
             </div>
 
+            <!-- Results section (hidden until results are available) -->
             <div class="results-container hidden" id="resultsContainer">
+                <!-- Results header with statistics -->
                 <div class="results-header">
                     <h2>Results</h2>
                     <div class="results-stats">
@@ -47,16 +68,19 @@
                     </div>
                 </div>
 
+                <!-- Action buttons for the results -->
                 <div class="results-actions">
                     <button id="copyAllButton"><i class="fas fa-copy"></i> Copy All</button>
                     <button id="downloadButton"><i class="fas fa-download"></i> Download CSV</button>
                 </div>
 
+                <!-- Container for the list of extracted emails -->
                 <div class="email-list" id="emailList">
-                    <!-- Email items will be added here dynamically -->
+                    <!-- Email items will be added here dynamically by JavaScript -->
                 </div>
             </div>
 
+            <!-- Error message container (hidden by default) -->
             <div class="error-container hidden" id="errorContainer">
                 <div class="error-icon">
                     <i class="fas fa-exclamation-triangle"></i>
@@ -65,6 +89,7 @@
             </div>
         </main>
 
+        <!-- Footer section -->
         <footer>
             <p>&copy; 2025 Email Extractor Tool</p>
         </footer>
