@@ -2,8 +2,7 @@
 
 A web application that extracts email addresses from websites by crawling multiple pages within the same domain.
 
-![Email Extractor Screenshot](![image](https://github.com/user-attachments/assets/1e3d3de3-0d5b-43f9-8d2c-9c6ce4ff40dd)
-)
+![Email Extractor Screenshot](https://github.com/user-attachments/assets/1e3d3de3-0d5b-43f9-8d2c-9c6ce4ff40dd)
 
 ## 🌟 Features
 
@@ -151,8 +150,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 Your Name - [ranjankumarpandit92054@gmail.com](mailto:ranjankumarpandit92054@gmail.com)
 
-Project Link: [https://github.com/Ranj8521Kumar/Emails-Extractor/]((https://github.com/Ranj8521Kumar/Emails-Extractor/))
+Project Link: [https://github.com/Ranj8521Kumar/Emails-Extractor/](https://github.com/Ranj8521Kumar/Emails-Extractor/)
 
 ---
 
-Made with ❤️ by [Ranjan]
+Made with ❤️ by Ranjan
