@@ -27,11 +27,14 @@ def get_domain(url):
     return parsed_url.netloc
 
 
-def extract_emails_from_url(url, max_pages=50):
+def extract_emails_from_url(url, max_pages=10):  # Reduced default max_pages for better performance
     try:
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
         }
+
+        # Limit max_pages to a reasonable number for free tier
+        max_pages = min(max_pages, 20)  # Cap at 20 pages to prevent timeouts
 
         # Initialize variables
         base_domain = get_domain(url)
@@ -40,9 +43,45 @@ def extract_emails_from_url(url, max_pages=50):
         urls_to_visit = [url]
         page_count = 0
 
-        # Crawl the website
-        while urls_to_visit and page_count < max_pages:
-            current_url = urls_to_visit.pop(0)
+        # First, extract emails from the main page
+        try:
+            response = requests.get(url, headers=headers, timeout=5)  # Reduced timeout
+
+            if response.status_code == 200:
+                soup = BeautifulSoup(response.text, 'html.parser')
+
+                # Extract emails from the main page
+                page_emails = extract_emails_from_page(soup)
+                emails.update(page_emails)
+
+                # Find links on the main page
+                for a_tag in soup.find_all('a', href=True):
+                    link = a_tag['href']
+                    # Create absolute URL
+                    absolute_link = urljoin(url, link)
+
+                    # Only add links on the same domain
+                    if get_domain(absolute_link) == base_domain and absolute_link != url:
+                        urls_to_visit.append(absolute_link)
+
+                visited_urls.add(url)
+                page_count = 1
+
+        except requests.exceptions.RequestException:
+            # If main page fails, return empty result
+            return {
+                'emails': [],
+                'pages_crawled': 0,
+                'base_url': url,
+                'error': 'Failed to access the main page'
+            }
+
+        # Crawl additional pages (limited number)
+        for i in range(min(len(urls_to_visit), max_pages - 1)):
+            if page_count >= max_pages:
+                break
+
+            current_url = urls_to_visit[i]
 
             # Skip if already visited
             if current_url in visited_urls:
@@ -52,7 +91,7 @@ def extract_emails_from_url(url, max_pages=50):
             page_count += 1
 
             try:
-                response = requests.get(current_url, headers=headers, timeout=10)
+                response = requests.get(current_url, headers=headers, timeout=5)  # Reduced timeout
 
                 if response.status_code != 200:
                     continue
@@ -62,16 +101,6 @@ def extract_emails_from_url(url, max_pages=50):
                 # Extract emails from the current page
                 page_emails = extract_emails_from_page(soup)
                 emails.update(page_emails)
-
-                # Find links to other pages on the same domain
-                for a_tag in soup.find_all('a', href=True):
-                    link = a_tag['href']
-                    # Create absolute URL
-                    absolute_link = urljoin(current_url, link)
-
-                    # Only follow links on the same domain
-                    if get_domain(absolute_link) == base_domain and absolute_link not in visited_urls:
-                        urls_to_visit.append(absolute_link)
 
             except requests.exceptions.RequestException:
                 # Skip problematic URLs
@@ -83,5 +112,5 @@ def extract_emails_from_url(url, max_pages=50):
             'base_url': url
         }
 
-    except requests.exceptions.RequestException as e:
+    except Exception as e:
         return {'error': str(e)}

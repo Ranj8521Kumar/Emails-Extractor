@@ -84,25 +84,40 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadCsv(emails);
     });
 
-    // API call function
+    // API call function with timeout handling
     async function extractEmails(url, maxPages) {
-        const response = await fetch(`${API_URL}/extract-emails`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                url: url,
-                max_pages: maxPages
-            })
-        });
+        try {
+            // Set a timeout for the fetch request (30 seconds)
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Failed to extract emails');
+            const response = await fetch(`${API_URL}/extract-emails`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: url,
+                    max_pages: maxPages
+                }),
+                signal: controller.signal
+            });
+
+            // Clear the timeout
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to extract emails');
+            }
+
+            return await response.json();
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                throw new Error('Request timed out. The website might be too large or slow to process.');
+            }
+            throw error;
         }
-
-        return await response.json();
     }
 
     // Display results function

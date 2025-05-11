@@ -32,10 +32,18 @@ def api_info():
             'method': 'POST',
             'body': {
                 'url': 'The website URL to crawl',
-                'max_pages': '(Optional) Maximum number of pages to crawl (default: 50)'
+                'max_pages': '(Optional) Maximum number of pages to crawl (default: 10, max: 20)'
             },
-            'description': 'Extracts emails from an entire website by crawling all pages within the same domain'
+            'description': 'Extracts emails from an entire website by crawling pages within the same domain'
         }
+    })
+
+@app.route('/health')
+def health_check():
+    """Simple health check endpoint for monitoring."""
+    return jsonify({
+        'status': 'ok',
+        'message': 'Email Extractor API is running'
     })
 
 
@@ -46,7 +54,9 @@ def extract_emails():
         return jsonify({'message': 'Please provide a valid URL in the request body.'}), 400
 
     url = data['url']
-    max_pages = data.get('max_pages', 50)  # Default to 50 pages if not specified
+    max_pages = data.get('max_pages', 10)  # Default to 10 pages if not specified
+    # Limit max_pages to 20 for performance reasons
+    max_pages = min(max_pages, 20)
 
     result = extract_emails_from_url(url, max_pages=max_pages)
     return jsonify(result)

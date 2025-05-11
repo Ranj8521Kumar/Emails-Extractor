@@ -114,6 +114,13 @@ input[type="url"] {
     border-radius: 4px;
 }
 
+.setting small {
+    display: block;
+    margin-top: 5px;
+    color: #666;
+    font-size: 0.8rem;
+}
+
 button {
     background-color: var(--primary-color);
     color: white;
