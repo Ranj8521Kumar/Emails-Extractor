@@ -1,10 +1,29 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
 from utils import extract_emails_from_url
+import os
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 @app.route('/')
 def home():
+    # Redirect to client app
+    return """
+    <html>
+        <head>
+            <meta http-equiv="refresh" content="0; url=/client/" />
+            <title>Redirecting to Email Extractor</title>
+        </head>
+        <body>
+            <p>Redirecting to the Email Extractor app...</p>
+            <p><a href="/client/">Click here if you are not redirected automatically</a></p>
+        </body>
+    </html>
+    """
+
+@app.route('/api')
+def api_info():
     return jsonify({
         'message': 'Welcome to the email extractor API!',
         'usage': {
@@ -31,7 +50,17 @@ def extract_emails():
     result = extract_emails_from_url(url, max_pages=max_pages)
     return jsonify(result)
 
+# Serve frontend files
+@app.route('/client/<path:path>')
+def serve_client(path):
+    client_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'client')
+    return send_from_directory(client_dir, path)
+
+@app.route('/client/')
+def serve_client_index():
+    client_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'client')
+    return send_from_directory(client_dir, 'index.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
-
 
